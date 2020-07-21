@@ -9,7 +9,6 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D pelaaja;
 
     public float moveSpeed = 5f;
-    public float speed;
 
     private bool FacingRight = true;
 
