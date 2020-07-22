@@ -23,8 +23,9 @@ public class BulletController : MonoBehaviour
     {
         if (other.tag == "Enemy")
         {
-            Destroy(other.gameObject);
+            Destroy(gameObject);
+            
         }
-        Destroy(gameObject);
+        
     }
 }
