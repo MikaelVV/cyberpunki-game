@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -11,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 5f;
 
     private bool FacingRight = true;
+
+    public Animator anim;
 
 
     void Start()
@@ -37,6 +37,16 @@ public class PlayerMovement : MonoBehaviour
         {
             Flip();
         }
+
+        if (x == 0 && y == 0)
+        {
+            anim.SetBool("Walking", false);
+        }
+        else
+        {
+            anim.SetBool("Walking", true);
+        }
+
     }
 
     void Flip()
