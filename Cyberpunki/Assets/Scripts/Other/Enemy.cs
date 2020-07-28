@@ -6,9 +6,19 @@ public class Enemy : MonoBehaviour
 {
     private SpriteRenderer sprite;
 
+    private Material matRed;
+    private Material matDefault;
+
+    public int health = 10;
+
+    
+
+
     void Start()
     {
         sprite = GetComponent<SpriteRenderer>();
+        matRed = Resources.Load("RedFlash", typeof(Material)) as Material;
+        matDefault = sprite.material;
     }
 
     void Update()
@@ -16,13 +26,37 @@ public class Enemy : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (other.tag == "Player")
+        if (collision.CompareTag ("Bullet"))
+        {
+            sprite.material = matRed;
+
+            if(health <= 0)
+            {
+                Death();
+            }
+            else
+            {
+                Invoke("ResetMaterial", .05f);
+            }
+        }
+
+       else if (collision.CompareTag  ("Player"))
         {
             sprite.sortingOrder = 3;
         }
 
+    }
+
+    public void takeDamage(int damage)
+    {
+        health -= damage;
+    }
+
+    void ResetMaterial()
+    {
+        sprite.material = matDefault;
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -32,5 +66,10 @@ public class Enemy : MonoBehaviour
             sprite.sortingOrder = 0;
 
         }
+    }
+
+    private void Death()
+    {
+        Destroy(gameObject);
     }
 }

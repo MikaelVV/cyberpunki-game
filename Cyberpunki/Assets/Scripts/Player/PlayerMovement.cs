@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Animator anim;
 
+    public int health = 10;
+
 
     void Start()
     {

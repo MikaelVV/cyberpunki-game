@@ -7,6 +7,7 @@ public class BulletController : MonoBehaviour
     public float speed = 1f;
     public Rigidbody2D rbbullet;
 
+    public int damage = 5;
 
     void Start()
     {
@@ -21,10 +22,17 @@ public class BulletController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Enemy enemy = other.transform.GetComponent<Enemy>();
         if (other.tag == "Enemy")
         {
+            enemy.takeDamage(damage);
             Destroy(gameObject);
             
+        }
+
+        else if (other.tag =="Test")
+        {
+            Destroy(gameObject);
         }
         
     }
