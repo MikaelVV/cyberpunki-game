@@ -11,7 +11,7 @@ public class BulletController : MonoBehaviour
 
     void Start()
     {
-        
+        Invoke("BulletDestroyer", 1.5f);
     }
 
 
@@ -35,5 +35,10 @@ public class BulletController : MonoBehaviour
             Destroy(gameObject);
         }
         
+    }
+
+    void BulletDestroyer()
+    {
+        Destroy(gameObject);
     }
 }
