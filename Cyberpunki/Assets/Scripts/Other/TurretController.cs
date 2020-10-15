@@ -5,51 +5,59 @@ using UnityEngine;
 public class TurretController : MonoBehaviour
 {
 
+    public float distance;
+    public float wakeRange;
+    public float shootInterval;
+    public float bulletSpeed = 100;
+    public float bulletTimer;
+
+    public bool awake = false;
+
+    public GameObject bullet;
     public Transform target;
-    public Transform Firepoint1;
-    public Transform Firepoint2;
-    public GameObject turret;
-    public GameObject TurretBullet;
-
-    public float turretSpeed;
-    public float Firerate;
-    private float Ratetime;
-    float firingTimer = 8;
-    public float range;
-    private float lastShotTime = float.MinValue;
-    float distance;
-
-    private CircleCollider2D Turretrange;
-
-    void Start()
-    {
-        Turretrange = GetComponent<CircleCollider2D>();
-    }
-
+    public Transform firePoint1, firePoint2;
 
     void Update()
     {
-        Vector2 relativePos = target.position - transform.position;
-        Quaternion rotation = Quaternion.LookRotation(relativePos);
-        rotation.x = 0;
-        rotation.y = 0;
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turretSpeed);
-        distance = Vector2.Distance(transform.position,target.position);
 
-        if (distance < range && Time.time > lastShotTime + (3.0f / Firerate))
+        RangeCheck();
+    }
+
+
+    void RangeCheck()
+    {
+        distance = Vector3.Distance(transform.position, target.transform.position);
+
+        if(distance < wakeRange)
         {
-            Debug.Log("Pelaaja astui tykin läheisyyteen");
-            lastShotTime = Time.time;
-            ShootBullet();
+            awake = true;
+        }
+
+        if(distance > wakeRange)
+        {
+            awake = false;
         }
     }
 
-    void ShootBullet()
+    public void Attack()
     {
-        Ratetime = Time.time + Firerate;
-        firingTimer -= Time.deltaTime;
-        Instantiate(TurretBullet, Firepoint1.position + Firepoint2.position, transform.rotation);
-        transform.TransformDirection(0, 0, firingTimer);
-    }
+        bulletTimer += Time.deltaTime;
 
+        if(bulletTimer >= shootInterval)
+        {
+            Vector2 direction = target.transform.position - transform.position;
+            direction.Normalize();
+
+            if (distance < wakeRange)
+            {
+                GameObject bulletClone;
+                bulletClone = Instantiate(bullet, firePoint1.transform.position, firePoint1.transform.rotation) as GameObject;
+                bulletClone.GetComponent<Rigidbody2D>().velocity = direction * bulletSpeed;
+
+                bulletTimer = 0;
+
+            }
+
+        }
+    }
 }
